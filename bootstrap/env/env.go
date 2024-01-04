@@ -1,4 +1,4 @@
-package bootstrap
+package env
 
 import (
 	"log"
@@ -9,6 +9,7 @@ import (
 type Env struct {
 	AppEnv               string `mapstructure:"APP_ENV"`
 	ServerAddress        string `mapstructure:"SERVER_ADDRESS"`
+	ApiKey				 string	`mapstructure:"API_KEY"`
 	DBHost               string `mapstructure:"DB_HOST"`
 	DBPort               string `mapstructure:"DB_PORT"`
 	DBUser               string `mapstructure:"DB_USER"`
@@ -18,9 +19,10 @@ type Env struct {
 	RefreshTokenExpyHour string `mapstructure:"REFRESH_TOKEN_EXPY_HOUR"`
 	AccessTokenSecret    string `mapstructure:"ACCESS_TOKEN_SECRET"`
 	RefreshTokenSecret   string `mapstructure:"REFRESH_TOKEN_SECRET"`
+	ClientURL			 string `mapstructure:"CLIENT_URL"`
 }
 
-var globenv *Env
+var Globenv *Env
 
 func InitEnv() {
 	env := Env{}
@@ -38,5 +40,5 @@ func InitEnv() {
 		log.Println("Server App is running on development env")
 	}
 
-	globenv = &env 
+	Globenv = &env 
 }

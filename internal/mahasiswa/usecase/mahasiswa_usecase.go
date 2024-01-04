@@ -1,19 +1,24 @@
 package usecase
 
 import (
-	"time"
 	"context"
+	"log"
+	"time"
 
-	"game-corner/domain"
+	"github.com/devanfer02/game-corner-go/domain"
+
+	"github.com/go-playground/validator/v10"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type mahasiswaUsecase struct {
-	mahasiswaRepo	domain.MahasiswaRepostory
-	contextTimeout	time.Duration
+	mahasiswaRepo  domain.MahasiswaRepository
+	contextTimeout time.Duration
+	mhsValidator *validator.Validate
 }
 
-func NewMahasiswaUsecase(repo domain.MahasiswaRepostory, timeout time.Duration) domain.MahasiswaUsecase {
-	return &mahasiswaUsecase{repo, timeout}
+func NewMahasiswaUsecase(repo domain.MahasiswaRepository, timeout time.Duration) domain.MahasiswaUsecase {
+	return &mahasiswaUsecase{repo, timeout, validator.New()}
 }
 
 func (ucase *mahasiswaUsecase) FetchAll(ctx context.Context) ([]domain.Mahasiswa, error) {
@@ -22,25 +27,29 @@ func (ucase *mahasiswaUsecase) FetchAll(ctx context.Context) ([]domain.Mahasiswa
 
 	res, err := ucase.mahasiswaRepo.FetchAll(ctxc)
 	if err != nil {
-		return nil, err 
+		return nil, err
 	}
 
-	return res, nil 
+	return res, nil
 }
 
 func (ucase *mahasiswaUsecase) FetchByNIM(ctx context.Context, nim string) (domain.Mahasiswa, error) {
 	ctxc, cancel := context.WithTimeout(ctx, ucase.contextTimeout)
 	defer cancel()
-	
+
 	res, err := ucase.mahasiswaRepo.FetchByNIM(ctxc, nim)
 	if err != nil {
-		return domain.Mahasiswa{}, err 
+		return domain.Mahasiswa{}, err
 	}
 
-	return res, nil 
+	return res, nil
 }
 
-func (ucase *mahasiswaUsecase) Register(ctx context.Context, mhs *domain.Mahasiswa) error {
+func (ucase *mahasiswaUsecase) Register(ctx context.Context, mhs *domain.MahasiswaRegister) error {
+	if err := ucase.mhsValidator.Struct(mhs); err != nil {
+		return domain.ErrBadRequest
+	}
+
 	ctxc, cancel := context.WithTimeout(ctx, ucase.contextTimeout)
 	defer cancel()
 
@@ -49,9 +58,10 @@ func (ucase *mahasiswaUsecase) Register(ctx context.Context, mhs *domain.Mahasis
 		return domain.ErrConflict
 	}
 
+	ucase.hashPassword(mhs)
 	err := ucase.mahasiswaRepo.Register(ctxc, mhs)
 
-	return err 
+	return err
 }
 
 func (ucase *mahasiswaUsecase) Update(ctx context.Context, mhs *domain.Mahasiswa) error {
@@ -68,7 +78,7 @@ func (ucase *mahasiswaUsecase) Delete(ctx context.Context, nim string) error {
 
 	existedMahasiswa, err := ucase.mahasiswaRepo.FetchByNIM(ctxc, nim)
 	if err != nil {
-		return err 
+		return err
 	}
 
 	if existedMahasiswa == (domain.Mahasiswa{}) {
@@ -76,4 +86,14 @@ func (ucase *mahasiswaUsecase) Delete(ctx context.Context, nim string) error {
 	}
 
 	return ucase.mahasiswaRepo.Delete(ctxc, nim)
+}
+
+func (ucase *mahasiswaUsecase) hashPassword(mhs *domain.MahasiswaRegister) {
+	password, err := bcrypt.GenerateFromPassword([]byte(mhs.Password), 10)
+
+	if err != nil {
+		log.Fatalf("ERR: %s\n", err.Error())
+	}
+
+	mhs.Password = string(password)
 }

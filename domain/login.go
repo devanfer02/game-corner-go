@@ -3,7 +3,7 @@ package domain
 import "context"
 
 type LoginRequest struct {
-	Email			string		`json:"email" validator:"required"`
+	NIM				string		`json:"nim" validator:"required"`
 	Password		string		`json:"password" validator:"required"`
 }
 
@@ -13,7 +13,7 @@ type LoginResponse struct {
 }
 
 type LoginUsecase interface {
-	FetchMahasiswaByEmail(ctx context.Context, email string) (Mahasiswa, error)
+	FetchMahasiswaByNIM(ctx context.Context, nim string) (Mahasiswa, error)
 	CreateAcessToken(mahasiswa *Mahasiswa, secret string, expired int) (string, error)
 	CreateRefreshToken(mahasiswa *Mahasiswa, secret string, expired int) (string, error)
 }

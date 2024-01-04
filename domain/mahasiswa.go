@@ -5,6 +5,14 @@ import (
 	"context"
 )
 
+type MahasiswaRegister struct {
+	NIM			string 		`json:"nim"`
+	Email		string 		`json:"email" validate:"required,email"`
+	Password	string 		`json:"password" validate:"alphanum,min=6,max=30"`
+	Nama		string 		`json:"nama"`
+	Jurusan		string		`json:"prodi"`
+}
+
 type Mahasiswa struct {
 	NIM			string 		`json:"nim"`
 	Email		string 		`json:"email"`
@@ -19,14 +27,14 @@ type MahasiswaUsecase interface {
 	FetchAll(ctx context.Context) ([]Mahasiswa, error)
 	FetchByNIM(ctx context.Context, nim string) (Mahasiswa, error)
 	Update(ctx context.Context, mhs *Mahasiswa) error 
-	Register(ctx context.Context, mhs *Mahasiswa) error 
+	Register(ctx context.Context, mhs *MahasiswaRegister) error 
 	Delete(ctx context.Context, nim string) error 
 }
 
-type MahasiswaRepostory interface {
+type MahasiswaRepository interface {
 	FetchAll(ctx context.Context) ([]Mahasiswa, error)
 	FetchByNIM(ctx context.Context, nim string) (Mahasiswa, error)
 	Update(ctx context.Context, mhs *Mahasiswa) error 
-	Register(ctx context.Context, mhs *Mahasiswa) error 
+	Register(ctx context.Context, mhs *MahasiswaRegister) error 
 	Delete(ctx context.Context, nim string) error 
 }

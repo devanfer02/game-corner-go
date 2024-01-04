@@ -2,7 +2,6 @@ package domain
 
 import (
 	"errors"
-	"log"
 	"net/http"
 )
 
@@ -19,7 +18,6 @@ func GetErrorCode(err error) int {
 		return http.StatusOK
 	}
 
-	log.Printf("ERROR: %s\n", err.Error())
 	switch err  {
 		case ErrServerError :
 			return http.StatusInternalServerError
