@@ -6,11 +6,12 @@ import (
 )
 
 var (
-	ErrServerError 	= errors.New("internal server error")
-	ErrNotFound		= errors.New("requested item not found")
-	ErrConflict		= errors.New("item already exist")
-	ErrBadRequest 	= errors.New("given body request is not valid")
-	ErrBadParam		= errors.New("given param request is not valid")
+	ErrServerError 		= errors.New("internal server error")
+	ErrNotFound			= errors.New("requested item not found")
+	ErrConflict			= errors.New("item already exist")
+	ErrBadRequest 		= errors.New("given body request is not valid")
+	ErrBadParam			= errors.New("given param request is not valid")
+	ErrInvalidMahasiswa = errors.New("invalid nim or password")
 )
 
 func GetErrorCode(err error) int {
@@ -29,6 +30,8 @@ func GetErrorCode(err error) int {
 			return http.StatusBadRequest
 		case ErrBadRequest : 
 			return http.StatusBadRequest
+		case ErrInvalidMahasiswa :
+			return http.StatusUnauthorized
 		default : 
 			return http.StatusInternalServerError
 	}

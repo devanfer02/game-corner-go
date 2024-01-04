@@ -5,6 +5,7 @@ import (
 
 	"github.com/devanfer02/game-corner-go/domain"
 	ghttp "github.com/devanfer02/game-corner-go/http"
+	"github.com/devanfer02/game-corner-go/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,19 +14,17 @@ type MahasiswaHandler struct {
 	MahasiswaUsecase domain.MahasiswaUsecase
 }
 
-func NewMahasiswaHandler(r *gin.Engine, u domain.MahasiswaUsecase) {
+func NewMahasiswaHandler(r *gin.Engine, u domain.MahasiswaUsecase, mdlwr *middleware.Middleware) {
 	handler := &MahasiswaHandler{
 		MahasiswaUsecase: u,
 	}
-
+	
 	rMhs := r.Group("/mahasiswa")
-	{
-		rMhs.GET("/", handler.FetchMahasiswa)
-		rMhs.GET("/:nim", handler.FetchByNIM)
-		rMhs.POST("/", handler.RegisterMahasiswa)
-		rMhs.PATCH("/:nim", handler.UpdateMahasiswa)
-		rMhs.DELETE("/:nim", handler.DeleteMahasiswa)
-	}
+	rMhs.GET("/", handler.FetchMahasiswa)
+	rMhs.GET("/:nim", handler.FetchByNIM)
+	rMhs.POST("/", handler.RegisterMahasiswa)
+	rMhs.PATCH("/:nim", handler.UpdateMahasiswa)
+	rMhs.DELETE("/:nim", handler.DeleteMahasiswa)
 }
 
 func (handler *MahasiswaHandler) FetchMahasiswa(ctx *gin.Context) {

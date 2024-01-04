@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InterceptorKey() gin.HandlerFunc {
+func (mdlwr *Middleware) InterceptorKey() gin.HandlerFunc {
 	return func (ctx *gin.Context) {
-		key := ctx.Request.Header["X-API-Key"]
+		key := ctx.GetHeader("X-API-Key")
 	
-		if (key[0] == env.Globenv.ApiKey) {
+		if (key != env.Globenv.ApiKey) {
 			ctx.AbortWithStatus(http.StatusForbidden)		
 			return
 		}

@@ -15,8 +15,8 @@ type Env struct {
 	DBUser               string `mapstructure:"DB_USER"`
 	DBPassword           string `mapstructure:"DB_PASSWORD"`
 	DBName               string `mapstructure:"DB_NAME"`
-	AccessTokenExpyHour  string `mapstructure:"ACCESS_TOKEN_EXPY_HOUR"`
-	RefreshTokenExpyHour string `mapstructure:"REFRESH_TOKEN_EXPY_HOUR"`
+	AccessTokenExpyHour  int	 `mapstructure:"ACCESS_TOKEN_EXPY_HOUR"`
+	RefreshTokenExpyHour int 	 `mapstructure:"REFRESH_TOKEN_EXPY_HOUR"`
 	AccessTokenSecret    string `mapstructure:"ACCESS_TOKEN_SECRET"`
 	RefreshTokenSecret   string `mapstructure:"REFRESH_TOKEN_SECRET"`
 	ClientURL			 string `mapstructure:"CLIENT_URL"`

@@ -8,5 +8,5 @@ type ResponseError struct {
 type Response struct {
 	Status		int 		`json:"status"`
 	Message		string 		`json:"message"`
-	Data		interface{}	`json:"data"`
+	Data		interface{}	`json:"data,omitempty"`
 }

@@ -6,11 +6,11 @@ import (
 )
 
 type MahasiswaRegister struct {
-	NIM			string 		`json:"nim"`
+	NIM			string 		`json:"nim" validate:"required"`
 	Email		string 		`json:"email" validate:"required,email"`
-	Password	string 		`json:"password" validate:"alphanum,min=6,max=30"`
-	Nama		string 		`json:"nama"`
-	Jurusan		string		`json:"prodi"`
+	Password	string 		`json:"password" validate:"required,alphanum,min=6,max=30"`
+	Nama		string 		`json:"nama" validate:"required"`
+	Jurusan		string		`json:"prodi" validate:"required"`
 }
 
 type Mahasiswa struct {

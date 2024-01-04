@@ -1,7 +1,5 @@
 package domain
 
-import "context"
-
 type LoginRequest struct {
 	NIM				string		`json:"nim" validator:"required"`
 	Password		string		`json:"password" validator:"required"`
@@ -13,7 +11,6 @@ type LoginResponse struct {
 }
 
 type LoginUsecase interface {
-	FetchMahasiswaByNIM(ctx context.Context, nim string) (Mahasiswa, error)
-	CreateAcessToken(mahasiswa *Mahasiswa, secret string, expired int) (string, error)
-	CreateRefreshToken(mahasiswa *Mahasiswa, secret string, expired int) (string, error)
+	ValidateMahasiswa(mahasiswa *Mahasiswa, request *LoginRequest) error 
+	CreateFirebaseToken(mahasiswa *Mahasiswa, expired int) (string, error)
 }
